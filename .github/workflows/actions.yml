@@ -85,6 +85,7 @@ jobs:
               namespaces:
                 - kube-system
                 - local-path-storage
+        cat <<EOF > /tmp/pss/cluster-level-pss.yaml
         EOF
     - name: Mirror Setup
       run: |
@@ -198,6 +199,7 @@ jobs:
         kind --version
     - name: Create Kind Cluster 
       run: |
+        cat /tmp/pss/cluster-level-pss.yaml
         cat /tmp/cluster.yml
         export CLUSTER=$(uuidgen)
         echo "export CLUSTER=$CLUSTER" > cluster.env

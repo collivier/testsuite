@@ -72,8 +72,8 @@ jobs:
         fetch-depth: 0
     - name: Configuration file that can be consumed by the Pod Security Admission Controller
       run: |
-        mkdir -p /tmp/pss
-        cat <<EOF > /tmp/pss/cluster-level-pss.yaml
+        mkdir -p /shared/pss
+        cat <<EOF > /shared/pss/cluster-level-pss.yaml
         apiVersion: apiserver.config.k8s.io/v1
         kind: AdmissionConfiguration
         plugins:
@@ -107,16 +107,16 @@ jobs:
             kind: ClusterConfiguration
             apiServer:
               extraArgs:
-                admission-control-config-file: /tmp/pss/cluster-level-pss.yaml
+                admission-control-config-file: /shared/pss/cluster-level-pss.yaml
               extraVolumes:
                 - name: accf
-                  hostPath: /tmp/pss
-                  mountPath: /tmp/pss
+                  hostPath: /shared/pss
+                  mountPath: /shared/pss
                   readOnly: false
                   pathType: "DirectoryOrCreate"
           extraMounts:
-          - hostPath: /tmp/pss
-            containerPath: /tmp/pss
+          - hostPath: /shared/pss
+            containerPath: /shared/pss
             readOnly: false
             selinuxRelabel: false
             propagation: None
@@ -147,16 +147,16 @@ jobs:
             kind: ClusterConfiguration
             apiServer:
               extraArgs:
-                admission-control-config-file: /tmp/pss/cluster-level-pss.yaml
+                admission-control-config-file: /shared/pss/cluster-level-pss.yaml
               extraVolumes:
                 - name: accf
-                  hostPath: /tmp/pss
-                  mountPath: /tmp/pss
+                  hostPath: /shared/pss
+                  mountPath: /shared/pss
                   readOnly: false
                   pathType: "DirectoryOrCreate"
           extraMounts:
-          - hostPath: /tmp/pss
-            containerPath: /tmp/pss
+          - hostPath: /shared/pss
+            containerPath: /shared/pss
             readOnly: false
             selinuxRelabel: false
             propagation: None
@@ -174,16 +174,16 @@ jobs:
             kind: ClusterConfiguration
             apiServer:
               extraArgs:
-                admission-control-config-file: /tmp/pss/cluster-level-pss.yaml
+                admission-control-config-file: /shared/pss/cluster-level-pss.yaml
               extraVolumes:
                 - name: accf
-                  hostPath: /tmp/pss
-                  mountPath: /tmp/pss
+                  hostPath: /shared/pss
+                  mountPath: /shared/pss
                   readOnly: false
                   pathType: "DirectoryOrCreate"
           extraMounts:
-          - hostPath: /tmp/pss
-            containerPath: /tmp/pss
+          - hostPath: /shared/pss
+            containerPath: /shared/pss
             readOnly: false
             selinuxRelabel: false
             propagation: None
@@ -208,7 +208,7 @@ jobs:
     - name: Create Kind Cluster 
       run: |
         cat -A /tmp/cluster.yml
-        cat -A /tmp/pss/cluster-level-pss.yaml
+        cat -A /shared/pss/cluster-level-pss.yaml
         export CLUSTER=$(uuidgen)
         echo "export CLUSTER=$CLUSTER" > cluster.env
         echo kind create cluster --name $CLUSTER --config=/tmp/cluster.yml --kubeconfig ./$CLUSTER.conf

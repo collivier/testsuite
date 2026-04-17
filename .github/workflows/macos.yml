@@ -1,0 +1,24 @@
+name: macOS
+on:
+  push:
+    branches:
+jobs:
+  darwin-amd64:
+    runs-on: macos-26-intel
+    steps:
+      - run: |
+          brew install docker
+          brew install colima
+          brew install kubectl
+          colima start --kubernetes
+      - uses: crystal-lang/install-crystal@v1
+      - uses: actions/checkout@v4
+      - run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash
+      - run: |
+          shards install
+          crystal build src/cnf-testsuite.cr
+          ./cnf-testsuite setup
+          ./cnf-testsuite cnf_install cnf-config=example-cnfs/coredns || true
+          ./cnf-testsuite cert
+          ./cnf-testsuite uninstall_all

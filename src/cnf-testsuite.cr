@@ -79,7 +79,7 @@ end
 task "upsert_release" do |_, args|
   Log.info { "upserting release on: #{ReleaseManager::VERSION}" }
 
-  ghrm = ReleaseManager::GithubReleaseManager.new("lfn-cnti/testsuite")
+  ghrm = ReleaseManager::GithubReleaseManager.new("collivier/testsuite")
 
   release, asset = ghrm.upsert_release(version=ReleaseManager::VERSION)
   if release
